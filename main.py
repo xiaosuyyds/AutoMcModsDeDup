@@ -187,13 +187,17 @@ def auto_search_mod_name(mod_name):
 
 
 def auto_get_renamed(mod_mod_link, raw_mod_file_name):
-    soup = BeautifulSoup(requests.get(mod_mod_link).text, "html.parser")
-    chinese_name = soup.find("div", class_="class-title").find("h3").text.strip()
+    try:
+        soup = BeautifulSoup(requests.get(mod_mod_link).text, "html.parser")
+        chinese_name = soup.find("div", class_="class-title").find("h3").text.strip()
+    except:
+        chinese_name = ""
+
     rename = raw_mod_file_name
     if any('\u4e00' <= char <= '\u9fff' for char in chinese_name):
         rstr = r"[\/\\\:\*\?\"\<\>\|]"
         chinese_name = re.sub(rstr, "_", chinese_name)
-        if not raw_mod_file_name.startswith("["+chinese_name):
+        if not raw_mod_file_name.startswith("["+chinese_name) and len(chinese_name) > 0:
             rename = "[%s]%s" % (chinese_name, raw_mod_file_name)
 
     return rename
