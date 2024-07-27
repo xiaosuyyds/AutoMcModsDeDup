@@ -9,3 +9,5 @@
 
 *.jar
 .idea
+.venv
+main.exe
